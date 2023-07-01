@@ -7,9 +7,9 @@ import java.util.List;
 public interface ProductOrderService {
     ProductOrder createProductOrder(ProductOrder productOrder);
 
-    List getProductOrdersByProductID(Long productId);
+    List<ProductOrder> getProductOrdersByProductID(Long productId);
 
-    List getProductOrdersByOrderID(Long orderId);
+    List<ProductOrder> getProductOrdersByOrderID(Long orderId);
 
     ProductOrder updateProductOrder(ProductOrder productOrder, Long orderId, Long productId);
 
