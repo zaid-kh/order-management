@@ -1,5 +1,6 @@
 package edu.bzu.ordermanagement.entity;
 
+import edu.bzu.ordermanagement.entity.id.ProductOrderId;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -10,15 +11,26 @@ public class ProductOrder {
     // id is a composite primary key
     // productId is a foreign key from the product table
     // orderId is a foreign key from the order table
-    @Id
-    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    // https://www.baeldung.com/jpa-composite-primary-keys , this link aids in understanding composite primary keys
+    @EmbeddedId
+    private ProductOrderId id;
+
+    @MapsId("orderId") // this annotation makes it work over the defined ManyToOne relationship
     @ManyToOne
+    @JoinColumn(name = "order_id")
     private Order order;
-    @Id
+
+    @MapsId("productId")
     @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    @JoinColumn(name = "product_id")
     private Product product;
+
     private int quantity;
     private double price;
-    private double vat = getPrice() * 0.17; // vat is 17% of the price
+    private double vat;
+
+    @PrePersist
+    public void calculateVat() {
+        this.vat = this.price * 0.17;
+    }
 }
