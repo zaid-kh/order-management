@@ -6,8 +6,10 @@ import edu.bzu.ordermanagement.repository.OrderRepository;
 import edu.bzu.ordermanagement.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,18 +27,29 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Order> getAllOrders() {
+        return orderRepository.findAll();
+    }
+
+    @Override
     public Optional getOrderById(Long id) {
         return orderRepository.findById(id);
     }
 
     @Override
-    public Optional getOrderByCustomerId(Long id) {
+    public List<Order> getOrdersByCustomerId(Long id) {
         Order orderExample = new Order();
         Customer customer = new Customer();
         customer.setId(id);
         orderExample.setCustomer(customer);
-        Example<Order> example = Example.of(orderExample);
-        return orderRepository.findOne(example);
+        // matching criteria: exact match for customer id only
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnorePaths("id", "orderedAt")
+                .withIgnoreNullValues()
+                .withMatcher("customer.id", ExampleMatcher.GenericPropertyMatcher::exact);
+
+        Example<Order> example = Example.of(orderExample, matcher);
+        return orderRepository.findAll(example);
     }
 
     @Override
