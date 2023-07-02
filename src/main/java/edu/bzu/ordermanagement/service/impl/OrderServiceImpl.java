@@ -1,9 +1,11 @@
 package edu.bzu.ordermanagement.service.impl;
 
+import edu.bzu.ordermanagement.entity.Customer;
 import edu.bzu.ordermanagement.entity.Order;
 import edu.bzu.ordermanagement.repository.OrderRepository;
 import edu.bzu.ordermanagement.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -25,6 +27,16 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Optional getOrderById(Long id) {
         return orderRepository.findById(id);
+    }
+
+    @Override
+    public Optional getOrderByCustomerId(Long id) {
+        Order orderExample = new Order();
+        Customer customer = new Customer();
+        customer.setId(id);
+        orderExample.setCustomer(customer);
+        Example<Order> example = Example.of(orderExample);
+        return orderRepository.findOne(example);
     }
 
     @Override

@@ -9,6 +9,8 @@ public interface OrderService {
 
     Optional getOrderById(Long id);
 
+    Optional getOrderByCustomerId(Long id);
+
     Order updateOrder(Order order, Long id);
 
     void deleteOrder(Long id);
