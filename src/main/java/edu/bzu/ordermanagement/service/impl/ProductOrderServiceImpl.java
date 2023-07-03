@@ -49,11 +49,19 @@ public class ProductOrderServiceImpl implements ProductOrderService {
     }
 
     @Override
+    public Optional<ProductOrder> getProductOrder(Long orderId, Long productId) {
+        if (orderId == null || productId == null) {
+            return Optional.empty();
+        }
+        return findProductOrder(orderId, productId);
+    }
+
+    @Override
     public ProductOrder updateProductOrder(ProductOrder updatedProductOrder, Long orderId, Long productId) {
         // find the productOrder by orderId and productId then update it
         // if not found return null
         try {
-            Optional<ProductOrder> productOrder = getProductOrder(orderId, productId);
+            Optional<ProductOrder> productOrder = findProductOrder(orderId, productId);
             if (productOrder.isPresent()) {
                 productOrder.get().setQuantity(updatedProductOrder.getQuantity());
                 productOrder.get().setPrice(updatedProductOrder.getPrice());
@@ -70,14 +78,14 @@ public class ProductOrderServiceImpl implements ProductOrderService {
     public void deleteProductOrder(Long orderId, Long productId) {
         // create Example of productOrder with product and order objects then use findOne
         // to get the productOrder then delete it
-        Optional<ProductOrder> productOrder = getProductOrder(orderId, productId);
+        Optional<ProductOrder> productOrder = findProductOrder(orderId, productId);
         productOrder.ifPresent(productOrderRepository::delete);
     }
 
     /**
      * Retrieves productOrder by orderId and productId
      */
-    private Optional<ProductOrder> getProductOrder(Long orderId, Long productId) {
+    private Optional<ProductOrder> findProductOrder(Long orderId, Long productId) {
         ProductOrder productOrderExample = new ProductOrder();
         Order order = new Order();
         order.setId(orderId);

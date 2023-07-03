@@ -3,6 +3,7 @@ package edu.bzu.ordermanagement.service;
 import edu.bzu.ordermanagement.entity.ProductOrder;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductOrderService {
     ProductOrder createProductOrder(ProductOrder productOrder);
@@ -10,6 +11,8 @@ public interface ProductOrderService {
     List<ProductOrder> getProductOrdersByProductID(Long productId);
 
     List<ProductOrder> getProductOrdersByOrderID(Long orderId);
+
+    Optional<ProductOrder> getProductOrder(Long orderId, Long productId);
 
     ProductOrder updateProductOrder(ProductOrder productOrder, Long orderId, Long productId);
 
