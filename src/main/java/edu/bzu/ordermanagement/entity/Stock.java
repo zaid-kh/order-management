@@ -10,6 +10,7 @@ import java.sql.Date;
 @Table
 public class Stock {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     @ManyToOne

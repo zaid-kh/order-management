@@ -2,6 +2,7 @@ package edu.bzu.ordermanagement.service;
 
 import edu.bzu.ordermanagement.entity.Stock;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface StockService {
@@ -11,7 +12,9 @@ public interface StockService {
 
     void deleteStock(Long id);
 
+    List<Stock> getAllStocks();
+
     Optional getStockById(Long id);
 
-    Optional getStockByProductId(Long id);
+    List<Stock> getStocksByProductId(Long id);
 }
