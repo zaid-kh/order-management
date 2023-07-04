@@ -2,6 +2,7 @@ package edu.bzu.ordermanagement.entity;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.text.DecimalFormat;
@@ -15,7 +16,9 @@ public class Product {
     private Long id;
     private String slug; // unique (human-readable) identifier for a product
     private String name;
+    @Size(max = 10)
     private double price;
+    @Size(max = 10)
     private double vat;
     private boolean stockable;
     private String reference;

@@ -2,6 +2,7 @@ package edu.bzu.ordermanagement.entity;
 
 import edu.bzu.ordermanagement.entity.id.ProductOrderId;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
@@ -26,7 +27,9 @@ public class ProductOrder {
     private Product product;
 
     private int quantity;
+    @Size(max = 10)
     private double price;
+    @Size(max = 10)
     private double vat;
 
     @PrePersist

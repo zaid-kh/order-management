@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@RestControllerAdvice
 @RestController
 @RequestMapping("/customers")
 public class CustomerController {
@@ -20,6 +21,7 @@ public class CustomerController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
         Customer createdCustomer = customerService.create(customer);
         return new ResponseEntity<>(createdCustomer, HttpStatus.CREATED);
@@ -48,6 +50,7 @@ public class CustomerController {
         }
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
         customerService.delete(id);
