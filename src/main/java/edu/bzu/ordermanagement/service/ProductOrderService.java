@@ -8,6 +8,8 @@ import java.util.Optional;
 public interface ProductOrderService {
     ProductOrder createProductOrder(ProductOrder productOrder);
 
+    List<ProductOrder> getProductOrders();
+
     List<ProductOrder> getProductOrdersByProductID(Long productId);
 
     List<ProductOrder> getProductOrdersByOrderID(Long orderId);

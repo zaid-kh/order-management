@@ -29,31 +29,24 @@ public class ProductOrderServiceImpl implements ProductOrderService {
     }
 
     @Override
+    public List<ProductOrder> getProductOrders() {
+        return productOrderRepository.findAll();
+    }
+
+    @Override
     public List<ProductOrder> getProductOrdersByProductID(Long productId) {
-        ProductOrder productOrderExample = new ProductOrder();
-        Product product = new Product();
-        product.setId(productId);
-        productOrderExample.setProduct(product);
-        Example<ProductOrder> example = Example.of(productOrderExample);
-        return productOrderRepository.findAll(example);
+
+        return productOrderRepository.findByProductId(productId);
     }
 
     @Override
     public List<ProductOrder> getProductOrdersByOrderID(Long orderId) {
-        ProductOrder productOrderExample = new ProductOrder();
-        Order order = new Order();
-        order.setId(orderId);
-        productOrderExample.setOrder(order);
-        Example<ProductOrder> example = Example.of(productOrderExample);
-        return productOrderRepository.findAll(example);
+        return productOrderRepository.findByOrderId(orderId);
     }
 
     @Override
     public Optional<ProductOrder> getProductOrder(Long orderId, Long productId) {
-        if (orderId == null || productId == null) {
-            return Optional.empty();
-        }
-        return findProductOrder(orderId, productId);
+        return productOrderRepository.findByOrderIdAndProductId(orderId, productId);
     }
 
     @Override
@@ -61,7 +54,7 @@ public class ProductOrderServiceImpl implements ProductOrderService {
         // find the productOrder by orderId and productId then update it
         // if not found return null
         try {
-            Optional<ProductOrder> productOrder = findProductOrder(orderId, productId);
+            Optional<ProductOrder> productOrder = productOrderRepository.findByOrderIdAndProductId(orderId, productId);
             if (productOrder.isPresent()) {
                 productOrder.get().setQuantity(updatedProductOrder.getQuantity());
                 productOrder.get().setPrice(updatedProductOrder.getPrice());
@@ -76,24 +69,16 @@ public class ProductOrderServiceImpl implements ProductOrderService {
 
     @Override
     public void deleteProductOrder(Long orderId, Long productId) {
-        // create Example of productOrder with product and order objects then use findOne
-        // to get the productOrder then delete it
-        Optional<ProductOrder> productOrder = findProductOrder(orderId, productId);
-        productOrder.ifPresent(productOrderRepository::delete);
+        // find the productOrder by orderId and productId then delete it
+        // if not found return null
+        try {
+            Optional<ProductOrder> productOrder = productOrderRepository.findByOrderIdAndProductId(orderId, productId);
+            if (productOrder.isPresent()) {
+                productOrderRepository.delete(productOrder.get());
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
-    /**
-     * Retrieves productOrder by orderId and productId
-     */
-    private Optional<ProductOrder> findProductOrder(Long orderId, Long productId) {
-        ProductOrder productOrderExample = new ProductOrder();
-        Order order = new Order();
-        order.setId(orderId);
-        Product product = new Product();
-        product.setId(productId);
-        productOrderExample.setOrder(order);
-        productOrderExample.setProduct(product);
-        Example<ProductOrder> example = Example.of(productOrderExample);
-        return productOrderRepository.findOne(example);
-    }
 }
